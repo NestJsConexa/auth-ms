@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { ConfigModule } from '@nestjs/config';
         MONGODB_URI: Joi.string().required()
       })
     }),
-    DatabaseModule
+    DatabaseModule,
+    UsersModule
   ],
   controllers: [],
   providers: [],

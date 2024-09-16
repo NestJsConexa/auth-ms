@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UsersRepository } from '../repositories/users.repository';
 import { InjectConnection } from '@nestjs/mongoose';
 import { ClientProxy } from '@nestjs/microservices';
@@ -14,15 +14,27 @@ export class UsersService {
     @Inject('BUSINESS_SERVICE') private readonly businessClient: ClientProxy,
     @InjectConnection() private readonly connection: Connection,
     private readonly usersRepository: UsersRepository,
-  ) {}
+  ) { }
 
   async findAll(paginationDto: PaginationDto, token: string) {
-    return firstValueFrom(
-      this.businessClient.send(
-        { cmd: 'get user pagination' },
-        { paginationDto, token }
-      ),
-    );
+    try {
+
+      const result = firstValueFrom(
+        this.businessClient.send(
+          { cmd: 'get user pagination' },
+          { paginationDto, token }
+        ),
+      );
+
+      return result;
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 400) {
+          throw new BadRequestException('Solicitud incorrecta');
+        }
+      }
+      throw new InternalServerErrorException('Error al obtener la información de usuarios');
+    }
   }
 
 }

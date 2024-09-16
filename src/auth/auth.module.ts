@@ -24,9 +24,10 @@ import * as Joi from 'joi';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const secret = configService.get<string>('JWT_SECRET');
+        console.log('JWT_SECRET:', secret);
         return {
           secret,
-          signOptions: { expiresIn: configService.get<string>('JWT_EXPIRATION') },
+          signOptions: {expiresIn: '1h'},
         };
       },
     }),

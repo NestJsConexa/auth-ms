@@ -10,16 +10,19 @@ import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class UsersService {
 
-    constructor(
-        @Inject('BUSINESS_SERVICE') private readonly businessClient: ClientProxy,
-        @InjectConnection() private readonly connection: Connection,
-        private readonly usersRepository: UsersRepository,
-      ) {}
+  constructor(
+    @Inject('BUSINESS_SERVICE') private readonly businessClient: ClientProxy,
+    @InjectConnection() private readonly connection: Connection,
+    private readonly usersRepository: UsersRepository,
+  ) {}
 
-      async findAll(paginationDto: PaginationDto) {
-        return firstValueFrom(
-          this.businessClient.send({ cmd: 'get user pagination' }, paginationDto),
-        );
-      }
+  async findAll(paginationDto: PaginationDto, token: string) {
+    return firstValueFrom(
+      this.businessClient.send(
+        { cmd: 'get user pagination' },
+        { paginationDto, token }
+      ),
+    );
+  }
 
 }

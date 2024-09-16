@@ -7,6 +7,7 @@ import { UserDocument, UserSchema } from '../auth/schemas/user.schema';
 import { UsersRepository } from './repositories/users.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [DatabaseModule,
@@ -28,7 +29,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository],
+  providers: [UsersService, UsersRepository, JwtService],
   exports: [UsersRepository]
 })
 export class UsersModule {}
